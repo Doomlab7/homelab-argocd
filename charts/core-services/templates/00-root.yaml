@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/pypeaday/homelab-argocd.git
-    path: charts/core-services/
+    path: charts/core-services
     targetRevision: HEAD
   destination:
     server: https://kubernetes.default.svc
