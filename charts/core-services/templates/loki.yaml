@@ -1,21 +1,22 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: loki-stack
-  namespace: argocd
-  # finalizers:
-  #   - resources-finalizer.argocd.argoproj.io
-spec:
-  project: default
-  source:
-    repoURL: https://grafana.github.io/helm-charts
-    chart: loki-stack
-    targetRevision: 3.3.0
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: loki
-  syncPolicy:
-    syncOptions:
-      - CreateNamespace=true
-    automated:
-      selfHeal: true
+# TODO: deployment failed - idk how I want to run loki
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: loki-stack
+#   namespace: argocd
+#   # finalizers:
+#   #   - resources-finalizer.argocd.argoproj.io
+# spec:
+#   project: default
+#   source:
+#     repoURL: https://grafana.github.io/helm-charts
+#     chart: loki-stack
+#     targetRevision: 3.3.0
+#   destination:
+#     server: https://kubernetes.default.svc
+#     namespace: loki
+#   syncPolicy:
+#     syncOptions:
+#       - CreateNamespace=true
+#     automated:
+#       selfHeal: true
