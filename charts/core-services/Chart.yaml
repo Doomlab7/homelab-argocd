@@ -1,0 +1,12 @@
+apiVersion: v2
+name: core-services
+version: 0.0.1
+
+# hooks:
+#   pre-install:
+#   - name: create-namespace-root-app
+#     manifest: |-
+#       apiVersion: v1
+#       kind: Namespace
+#       metadata:
+#         name: root-app
