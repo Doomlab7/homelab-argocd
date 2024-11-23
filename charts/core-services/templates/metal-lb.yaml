@@ -36,12 +36,13 @@ spec:
 #       ]
 #     })
 #   }
+#   TODO: create my own helm chart with this configmap apart of it
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   namespace: metallb-system
-  name: config
+  name: metallb-config
 data:
   config: |
     address-pools:
@@ -49,3 +50,22 @@ data:
       protocol: layer2
       addresses:
       - 192.168.1.240-192.168.1.250
+---
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: metallb-psp
+spec:
+  privileged: true
+  allowedCapabilities:
+    - NET_ADMIN
+    - NET_RAW
+    - SYS_ADMIN
+  hostNetwork: true
+  hostPorts:
+    - min: 7472
+      max: 7473
+    - min: 7946
+      max: 7946
+  volumes:
+    - '*'
