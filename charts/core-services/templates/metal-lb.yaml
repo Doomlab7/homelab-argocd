@@ -3,14 +3,20 @@ kind: Application
 metadata:
   name: metal-lb
   namespace: argocd
-  # finalizers:
-  #   - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
     repoURL: https://metallb.github.io/metallb
     chart: metallb
     targetRevision: 0.14.8
+    values:
+      configInline:
+        config: |
+          address-pools:
+          - name: default
+            protocol: layer2
+            addresses:
+            - 192.168.1.240-192.168.1.250
   destination:
     server: https://kubernetes.default.svc
     namespace: metallb-system
@@ -18,54 +24,5 @@ spec:
     syncOptions:
       - CreateNamespace=true
     automated:
+      prune: true
       selfHeal: true
-#   // We want the MetalLB controller running on the control plane
-#   controller_toleration    = [local.control-plane-toleration]
-#   controller_node_selector = local.control-plane-node-selector
-# }
-
-#   // Change this to fit your needs!
-#   data = {
-#     config = yamlencode({
-#       address-pools = [
-#         {
-#           name      = "default"
-#           protocol  = "layer2"
-#           addresses = ["192.168.57.100-192.168.57.254"]
-#         }
-#       ]
-#     })
-#   }
-#   TODO: create my own helm chart with this configmap apart of it
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  namespace: metallb-system
-  name: metallb-config
-data:
-  config: |
-    address-pools:
-    - name: default
-      protocol: layer2
-      addresses:
-      - 192.168.1.240-192.168.1.250
----
-apiVersion: policy/v1beta1
-kind: PodSecurityPolicy
-metadata:
-  name: metallb-psp
-spec:
-  privileged: true
-  allowedCapabilities:
-    - NET_ADMIN
-    - NET_RAW
-    - SYS_ADMIN
-  hostNetwork: true
-  hostPorts:
-    - min: 7472
-      max: 7473
-    - min: 7946
-      max: 7946
-  volumes:
-    - '*'
